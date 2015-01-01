@@ -1019,7 +1019,7 @@ namespace Jarvan
         }
 
         private static void Forest()
-        {Game.PrintChat("yoyoyoy");
+        {
             var manacheck = _player.Mana >
                             _player.Spellbook.GetSpell(SpellSlot.Q).ManaCost +
                             _player.Spellbook.GetSpell(SpellSlot.E).ManaCost;
