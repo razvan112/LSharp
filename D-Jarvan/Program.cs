@@ -945,7 +945,7 @@ namespace D_Jarvan
                                (_player.MaxMana * (_config.Item("usepotionmp").GetValue<Slider>().Value) / 100);
             if (Utility.InFountain() || ObjectManager.Player.HasBuff("Recall")) return;
 
-            if (Utility.CountEnemysInRange(Player,800) > 0 ||
+            if (Utility.CountEnemysInRange(Player, 800) > 0 ||
                 (mobs.Count > 0 && _config.Item("ActiveJungle").GetValue<KeyBind>().Active &&(Items.HasItem(1039) ||
                   SmiteRed.Any(i => Items.HasItem(i)) || SmitePurple.Any(i => Items.HasItem(i)) ||
                   SmiteBlue.Any(i => Items.HasItem(i)) || SmiteGrey.Any(i => Items.HasItem(i))
@@ -1074,6 +1074,90 @@ namespace D_Jarvan
             {
                 _haveulti = false;
                 return;
+            }
+        }
+
+        private static void Drawing_OnDraw(EventArgs args)
+        {
+            if (_config.Item("Drawsmite").GetValue<bool>())
+            {
+                if (_config.Item("Usesmite").GetValue<KeyBind>().Active)
+                {
+                    Drawing.DrawText(Drawing.Width*0.90f, Drawing.Height*0.68f, System.Drawing.Color.DarkOrange,
+                        "Smite Is On");
+                }
+                else
+                    Drawing.DrawText(Drawing.Width*0.90f, Drawing.Height*0.68f, System.Drawing.Color.DarkRed,
+                        "Smite Is Off");
+            }
+            if (_config.Item("CircleLag").GetValue<bool>())
+            {
+                if (_config.Item("DrawEQF").GetValue<bool>())
+                {
+                    Utility.DrawCircle(ObjectManager.Player.Position,
+                        _q.Range + _config.Item("FlashDista").GetValue<Slider>().Value, System.Drawing.Color.Gray,
+                        _config.Item("CircleThickness").GetValue<Slider>().Value,
+                        _config.Item("CircleQuality").GetValue<Slider>().Value);
+                }
+                if (_config.Item("DrawQ").GetValue<bool>())
+                {
+                    Utility.DrawCircle(ObjectManager.Player.Position, _q.Range, System.Drawing.Color.Gray,
+                        _config.Item("CircleThickness").GetValue<Slider>().Value,
+                        _config.Item("CircleQuality").GetValue<Slider>().Value);
+                }
+                if (_config.Item("DrawW").GetValue<bool>())
+                {
+                    Utility.DrawCircle(ObjectManager.Player.Position, _w.Range, System.Drawing.Color.Gray,
+                        _config.Item("CircleThickness").GetValue<Slider>().Value,
+                        _config.Item("CircleQuality").GetValue<Slider>().Value);
+                }
+                if (_config.Item("DrawE").GetValue<bool>())
+                {
+                    Utility.DrawCircle(ObjectManager.Player.Position, _e.Range, System.Drawing.Color.Gray,
+                        _config.Item("CircleThickness").GetValue<Slider>().Value,
+                        _config.Item("CircleQuality").GetValue<Slider>().Value);
+                }
+                if (_config.Item("DrawR").GetValue<bool>())
+                {
+                    Utility.DrawCircle(ObjectManager.Player.Position, _r.Range, System.Drawing.Color.Gray,
+                        _config.Item("CircleThickness").GetValue<Slider>().Value,
+                        _config.Item("CircleQuality").GetValue<Slider>().Value);
+                }
+                if (_config.Item("DrawQR").GetValue<bool>())
+                {
+                    Utility.DrawCircle(ObjectManager.Player.Position, _q.Range + _r.Range, System.Drawing.Color.Gray,
+                        _config.Item("CircleThickness").GetValue<Slider>().Value,
+                        _config.Item("CircleQuality").GetValue<Slider>().Value);
+                }
+            }
+            else
+            {
+                if (_config.Item("DrawQ").GetValue<bool>())
+                {
+                    Drawing.DrawCircle(ObjectManager.Player.Position, _q.Range, System.Drawing.Color.White);
+                }
+                if (_config.Item("DrawW").GetValue<bool>())
+                {
+                    Drawing.DrawCircle(ObjectManager.Player.Position, _w.Range, System.Drawing.Color.White);
+                }
+                if (_config.Item("DrawE").GetValue<bool>())
+                {
+                    Drawing.DrawCircle(ObjectManager.Player.Position, _e.Range, System.Drawing.Color.White);
+                }
+
+                if (_config.Item("DrawR").GetValue<bool>())
+                {
+                    Drawing.DrawCircle(ObjectManager.Player.Position, _r.Range, System.Drawing.Color.White);
+                }
+                if (_config.Item("DrawQR").GetValue<bool>())
+                {
+                    Drawing.DrawCircle(ObjectManager.Player.Position, _q.Range + _r.Range, System.Drawing.Color.White);
+                }
+                if (_config.Item("DrawEQF").GetValue<bool>())
+                {
+                    Drawing.DrawCircle(ObjectManager.Player.Position,
+                        _q.Range + _config.Item("FlashDista").GetValue<Slider>().Value, System.Drawing.Color.White);
+                }
             }
         }
     }
