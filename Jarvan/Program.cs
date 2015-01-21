@@ -801,61 +801,6 @@ namespace Jarvan
             return (int) dmgs[index];
         }
 
-        //New map Monsters Name By SKO
-        private static void Smiteuse()
-        {
-            var jungle = _config.Item("ActiveJungle").GetValue<KeyBind>().Active;
-            if (ObjectManager.Player.Spellbook.CanUseSpell(_smiteSlot) != SpellState.Ready) return;
-            var useblue = _config.Item("Useblue").GetValue<bool>();
-            var usered = _config.Item("Usered").GetValue<bool>();
-            var health = (100 * (_player.Mana / _player.MaxMana)) < _config.Item("healthJ").GetValue<Slider>().Value;
-            var mana = (100 * (_player.Mana / _player.MaxMana)) < _config.Item("manaJ").GetValue<Slider>().Value;
-            string[] jungleMinions;
-            if (Utility.Map.GetMap()._MapType.Equals(Utility.Map.MapType.TwistedTreeline))
-            {
-                jungleMinions = new string[] { "TT_Spiderboss", "TT_NWraith", "TT_NGolem", "TT_NWolf" };
-            }
-            else
-            {
-                jungleMinions = new string[]
-                {
-                    "SRU_Blue", "SRU_Gromp", "SRU_Murkwolf", "SRU_Razorbeak", "SRU_Red", "SRU_Krug", "SRU_Dragon",
-                    "SRU_Baron", "Sru_Crab"
-                };
-            }
-            var minions = MinionManager.GetMinions(_player.Position, 1000, MinionTypes.All, MinionTeam.Neutral);
-            if (minions.Count() > 0)
-            {
-                int smiteDmg = GetSmiteDmg();
-
-                foreach (Obj_AI_Base minion in minions)
-                {
-                    if (Utility.Map.GetMap()._MapType.Equals(Utility.Map.MapType.TwistedTreeline) &&
-                        minion.Health <= smiteDmg &&
-                        jungleMinions.Any(name => minion.Name.Substring(0, minion.Name.Length - 5).Equals(name)))
-                    {
-                        ObjectManager.Player.Spellbook.CastSpell(_smiteSlot, minion);
-                    }
-                    if (minion.Health <= smiteDmg && jungleMinions.Any(name => minion.Name.StartsWith(name)) &&
-                        !jungleMinions.Any(name => minion.Name.Contains("Mini")))
-                    {
-                        ObjectManager.Player.Spellbook.CastSpell(_smiteSlot, minion);
-                    }
-                    else if (jungle && useblue && mana && minion.Health >= smiteDmg &&
-                             jungleMinions.Any(name => minion.Name.StartsWith("SRU_Blue")) &&
-                             !jungleMinions.Any(name => minion.Name.Contains("Mini")))
-                    {
-                        ObjectManager.Player.Spellbook.CastSpell(_smiteSlot, minion);
-                    }
-                    else if (jungle && usered && health && minion.Health >= smiteDmg &&
-                             jungleMinions.Any(name => minion.Name.StartsWith("SRU_Red")) &&
-                             !jungleMinions.Any(name => minion.Name.Contains("Mini")))
-                    {
-                        ObjectManager.Player.Spellbook.CastSpell(_smiteSlot, minion);
-                    }
-                }
-            }
-        }
         private static void UseItemes(Obj_AI_Hero target)
         {
             var iBilge = _config.Item("Bilge").GetValue<bool>();
