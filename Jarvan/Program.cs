@@ -831,8 +831,8 @@ namespace Jarvan
 
                 foreach (Obj_AI_Base minion in minions)
                 {
-					var map = Utility.Map.GetMap();
-					if (map != null && map.Type == Utility.Map.MapType.SummonersRift) &&
+			var map = Utility.Map.GetMap();
+			if ((map != null && map.Type == Utility.Map.MapType.SummonersRift) &&
                         minion.Health <= smiteDmg &&
                         jungleMinions.Any(name => minion.Name.Substring(0, minion.Name.Length - 5).Equals(name)))
                     {
