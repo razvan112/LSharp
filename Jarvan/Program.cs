@@ -19,8 +19,6 @@ namespace Jarvan
 
         private static SpellSlot _igniteSlot;
 
-        private static Int32 _lastSkin;
-
         private static Items.Item _tiamat, _hydra, _blade, _bilge, _rand, _lotis;
 
         private static Menu _config;
@@ -41,7 +39,6 @@ namespace Jarvan
         private static void Game_OnGameLoad(EventArgs args)
         {
             _player = ObjectManager.Player;
-            if (ObjectManager.Player.BaseSkinName != ChampionName) return;
 
             _q = new Spell(SpellSlot.Q, 770f);
             _w = new Spell(SpellSlot.W, 300f);
@@ -90,8 +87,6 @@ namespace Jarvan
                 .AddItem(
                     new MenuItem("ActiveComboEQR", "ComboEQ-R!").SetValue(new KeyBind("T".ToCharArray()[0],
                         KeyBindType.Press)));
-            _config.SubMenu("Combo")
-
 
             //Items public static Int32 Tiamat = 3077, Hydra = 3074, Blade = 3153, Bilge = 3144, Rand = 3143, lotis = 3190;
             _config.AddSubMenu(new Menu("items", "items"));
@@ -236,8 +231,6 @@ namespace Jarvan
             _config.SubMenu("Misc").AddItem(new MenuItem("Gap_W", "W GapClosers")).SetValue(true);
             _config.SubMenu("Misc").AddItem(new MenuItem("UseEQInt", "EQ to Interrupt")).SetValue(true);
             // _config.SubMenu("Misc").AddItem(new MenuItem("MinTargetsgap", "min enemy >=(GapClosers)").SetValue(new Slider(2, 1, 5)));
-            _config.SubMenu("Misc").AddItem(new MenuItem("skinjar", "Use Custom Skin").SetValue(false));
-            _config.SubMenu("Misc").AddItem(new MenuItem("skinjarvan", "Skin Changer").SetValue(new Slider(4, 1, 7)));
             _config.SubMenu("Misc").AddItem(new MenuItem("usePackets", "Usepackes")).SetValue(true);
 
             _config.AddToMainMenu();
@@ -247,11 +240,6 @@ namespace Jarvan
             Obj_AI_Hero.OnDelete += OnDeleteObj;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter.OnPossibleToInterrupt += Interrupter_OnPossibleToInterrupt;
-            if (_config.Item("skinjar").GetValue<bool>())
-            {
-                GenModelPacket(_player.ChampionName, _config.Item("skinjarvan").GetValue<Slider>().Value);
-                _lastSkin = _config.Item("skinjarvan").GetValue<Slider>().Value;
-            }
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
@@ -259,11 +247,6 @@ namespace Jarvan
             if (_config.Item("Forest").GetValue<KeyBind>().Active)
             {
                 Forest();
-            }
-            if (_config.Item("skinjar").GetValue<bool>() && SkinChanged())
-            {
-                GenModelPacket(_player.ChampionName, _config.Item("skinjarvan").GetValue<Slider>().Value);
-                _lastSkin = _config.Item("skinjarvan").GetValue<Slider>().Value;
             }
             if (_config.Item("ActiveCombo").GetValue<KeyBind>().Active)
             {
@@ -295,7 +278,6 @@ namespace Jarvan
             {
                 LastHit();
             }
-            ();
 
             _player = ObjectManager.Player;
 
@@ -328,16 +310,6 @@ namespace Jarvan
             }
         }
 
-        private static void GenModelPacket(string champ, int skinId)
-        {
-            Packet.S2C.UpdateModel.Encoded(new Packet.S2C.UpdateModel.Struct(_player.NetworkId, skinId, champ))
-                .Process();
-        }
-
-        private static bool SkinChanged()
-        {
-            return (_config.Item("skinjarvan").GetValue<Slider>().Value != _lastSkin);
-        }
 
         private static float ComboDamage(Obj_AI_Base enemy)
         {
