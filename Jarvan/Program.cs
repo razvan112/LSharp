@@ -103,11 +103,7 @@ namespace Jarvan
                     new MenuItem("ActiveComboEQR", "ComboEQ-R!").SetValue(new KeyBind("T".ToCharArray()[0],
                         KeyBindType.Press)));
             _config.SubMenu("Combo")
-                .AddItem(
-                    new MenuItem("ComboeqFlash", "ComboEQ- Flash!").SetValue(new KeyBind("H".ToCharArray()[0],
-                        KeyBindType.Press)));
-            _config.SubMenu("Combo")
-                .AddItem(new MenuItem("FlashDista", "Flash Distance").SetValue(new Slider(700, 700, 1000)));
+
 
             //Items public static Int32 Tiamat = 3077, Hydra = 3074, Blade = 3153, Bilge = 3144, Rand = 3143, lotis = 3190;
             _config.AddSubMenu(new Menu("items", "items"));
@@ -561,41 +557,6 @@ namespace Jarvan
             {
                 _hydra.Cast();
             }
-        }
-
-        private static void ComboeqFlash()
-        {
-            var flashDista = _config.Item("FlashDista").GetValue<Slider>().Value;
-            var manacheck = _player.Mana >
-                            _player.Spellbook.GetSpell(SpellSlot.Q).ManaCost +
-                            _player.Spellbook.GetSpell(SpellSlot.E).ManaCost;
-            var t = TargetSelector.GetTarget(_q.Range + 800, TargetSelector.DamageType.Magical);
-            if (t == null)
-            {
-                _player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
-            }
-            else
-            {
-                _player.IssueOrder(GameObjectOrder.AttackUnit, t);
-            }
-            Smiteontarget(t);
-            if (_flashSlot != SpellSlot.Unknown && _player.Spellbook.CanUseSpell(_flashSlot) == SpellState.Ready)
-            {
-                if (_e.IsReady() && _q.IsReady() && manacheck && t != null && _player.Distance(t) > _q.Range)
-                {
-                    _e.Cast(Game.CursorPos, Packets());
-                }
-                if (_epos != default(Vector3) && _q.InRange(_epos))
-                {
-                    _q.Cast(_epos, Packets());
-                }
-
-                if (t.IsValidTarget(flashDista) && !_q.IsReady())
-                {
-                    _player.Spellbook.CastSpell(_flashSlot, t.ServerPosition);
-                }
-            }
-            UseItemes(t);
         }
 
         private static void Laneclear()
