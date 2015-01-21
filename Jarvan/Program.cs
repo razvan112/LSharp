@@ -914,7 +914,7 @@ namespace Jarvan
                 }
             }
         }
-        private static void Usepotion()
+        private static void Usepotion(EventArgs args)
         {
             var mobs = MinionManager.GetMinions(_player.ServerPosition, _q.Range,
                 MinionTypes.All,
