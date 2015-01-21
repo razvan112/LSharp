@@ -811,7 +811,8 @@ namespace Jarvan
             var health = (100 * (_player.Mana / _player.MaxMana)) < _config.Item("healthJ").GetValue<Slider>().Value;
             var mana = (100 * (_player.Mana / _player.MaxMana)) < _config.Item("manaJ").GetValue<Slider>().Value;
             string[] jungleMinions;
-            if (Utility.Map.GetMap()._MapType.Equals(Utility.Map.MapType.TwistedTreeline))
+			var map = Utility.Map.GetMap();
+            if (map != null && map.Type == Utility.Map.MapType.SummonersRift)
             {
                 jungleMinions = new string[] { "TT_Spiderboss", "TT_NWraith", "TT_NGolem", "TT_NWolf" };
             }
@@ -830,7 +831,8 @@ namespace Jarvan
 
                 foreach (Obj_AI_Base minion in minions)
                 {
-                    if (Utility.Map.GetMap()._MapType.Equals(Utility.Map.MapType.TwistedTreeline) &&
+					var map = Utility.Map.GetMap();
+					if (map != null && map.Type == Utility.Map.MapType.SummonersRift) &&
                         minion.Health <= smiteDmg &&
                         jungleMinions.Any(name => minion.Name.Substring(0, minion.Name.Length - 5).Equals(name)))
                     {
